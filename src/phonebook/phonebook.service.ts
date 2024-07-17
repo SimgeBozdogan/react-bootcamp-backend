@@ -38,12 +38,18 @@ export class PhonebookService {
     this.phonebook.push(phonebook);
   }
 
-  update(id: number, updatePhonebook: Partial<Phonebook>) {
-    const phonebook = this.findOne(id);
+  async update(id: number, updatePhonebook: Partial<Phonebook>) {
+    const phonebook = await this.findOne(id); 
     if (phonebook) {
-      Object.assign(phonebook, updatePhonebook);
+      this.phonebook = this.phonebook.map((element) => {
+        if (element.id === id) {
+          return { ...element, ...updatePhonebook };
+        }
+        return element;
+      });
     }
   }
+  
 
   remove(id: number) {
     this.phonebook = this.phonebook.filter((element) => element.id !== id);
